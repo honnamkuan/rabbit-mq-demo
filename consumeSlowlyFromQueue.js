@@ -24,7 +24,7 @@ async function consumeFromQueue() {
           )}`
         );
         channel.ack(msg);
-      }, 1000);
+      }, 10000);
     },
     { noAck: false }
   );
