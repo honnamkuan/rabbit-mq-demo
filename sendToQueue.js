@@ -17,24 +17,17 @@ async function sendMessages() {
 
 async function sendMessageOneByOne(conn, channel, currentIndex) {
   setTimeout(async () => {
-    try {
-      const currentMessage = messages[currentIndex];
+    const currentMessage = messages[currentIndex];
 
-      // send message directly to queue
-      await channel.sendToQueue(queueName, Buffer.from(currentMessage), {
-        persistent: true
-      });
-      console.log(
-        `${moment().toISOString()} | Message sent = ${currentMessage}`
-      );
-      if (currentIndex < lastIndex) {
-        sendMessageOneByOne(conn, channel, ++currentIndex);
-      } else {
-        closeConns(conn, channel);
-      }
-    } catch (error) {
+    // send message directly to queue
+    await channel.sendToQueue(queueName, Buffer.from(currentMessage), {
+      persistent: true
+    });
+    console.log(`${moment().toISOString()} | Message sent = ${currentMessage}`);
+    if (currentIndex < lastIndex) {
+      sendMessageOneByOne(conn, channel, ++currentIndex);
+    } else {
       closeConns(conn, channel);
-      throw error;
     }
   }, 1000);
 }
