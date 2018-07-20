@@ -8,7 +8,7 @@ async function consumeFromQueue() {
   const conn = await amqp.connect("amqp:localhost"); // establish connection
 
   const channel = await conn.createChannel(); // create channel
-  // channel.prefetch(1);
+  channel.prefetch(1);
 
   await channel.assertQueue(queueName, { durable: true }); // create queue if not exists
 
