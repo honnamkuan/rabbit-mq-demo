@@ -1,14 +1,15 @@
 #!/usr/bin/env node
 
-const amqp = require('amqplib');
-const moment = require('moment');
+const amqp = require("amqplib");
+const moment = require("moment");
 
 async function sendMessage() {
-  const conn = await amqp.connect('amqp:localhost');
-  const channel = await conn.createChannel();
-  const queueName = 'MY_QUEUE';
+  const conn = await amqp.connect("amqp:localhost"); // establish connection
+  const channel = await conn.createChannel(); // create channel
+  const queueName = "MY_QUEUE";
 
-  await channel.assertQueue(queueName, { durable: false });
+  await channel.assertQueue(queueName, { durable: false }); // create queue if not exists
+  
   let sendCount = 0;
 
   const timer = setInterval(async () => {
