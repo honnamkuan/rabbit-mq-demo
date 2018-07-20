@@ -12,10 +12,11 @@ async function consumeFromQueue() {
 
   await channel.assertQueue(queueName, { durable: true }); // create queue if not exists
 
-  const reply = await channel.consume(
+  // consume and acknowledge message
+  await channel.consume(
     queueName,
     msg => {
-      console.log(`Receive message`);
+      console.log(`Received message`);
 
       setTimeout(() => {
         console.log(
@@ -23,13 +24,13 @@ async function consumeFromQueue() {
             "UTF-8"
           )}`
         );
-        channel.ack(msg);
-      }, 10000);
+        channel.ack(msg); // acknowledge message
+      }, 1000);
     },
     { noAck: false }
   );
 
-  console.log(`consumerTag = ${reply.consumerTag}`);
+  console.log(`Started successfully, waiting for message`);
 }
 
 // execute

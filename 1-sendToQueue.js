@@ -12,10 +12,10 @@ async function sendMessages() {
 
   await channel.assertQueue(queueName, { durable: true }); // create queue if not exists
 
-  sendMessageOneByOne(conn, channel, 0);
+  sendMessageWithInterval(conn, channel, 0);
 }
 
-async function sendMessageOneByOne(conn, channel, currentIndex) {
+async function sendMessageWithInterval(conn, channel, currentIndex) {
   setTimeout(async () => {
     const currentMessage = messages[currentIndex];
 
@@ -25,16 +25,14 @@ async function sendMessageOneByOne(conn, channel, currentIndex) {
     });
     console.log(`${moment().toISOString()} | Message sent = ${currentMessage}`);
     if (currentIndex < lastIndex) {
-      sendMessageOneByOne(conn, channel, ++currentIndex);
+      // send next message after 1 second
+      sendMessageWithInterval(conn, channel, ++currentIndex);
     } else {
-      closeConns(conn, channel);
+      // close connections
+      await channel.close();
+      await conn.close();
     }
   }, 1000);
-}
-
-async function closeConns(conn, channel) {
-  await channel.close();
-  await conn.close();
 }
 
 // execute
