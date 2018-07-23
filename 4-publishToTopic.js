@@ -3,7 +3,7 @@ const amqp = require("amqplib");
 
 const topicName = "MY_TOPIC";
 
-async function publishToTopic(routingKey, message) {
+async function publishToTopic(routingKey, messageToPublish) {
   const conn = await amqp.connect("amqp:localhost"); // establish connection
   const channel = await conn.createChannel(); // create channel
 
@@ -16,7 +16,7 @@ async function publishToTopic(routingKey, message) {
   const hasPublished = await channel.publish(
     exchangeResponse.exchange,
     routingKey,
-    Buffer.from(message, "UTF-8"),
+    Buffer.from(messageToPublish, "UTF-8"),
     { persistent: true } // Ensure message survives MQ server restart
   );
   console.log(hasPublished ? "Published to topic" : "Publish failed");
@@ -30,9 +30,9 @@ async function publishToTopic(routingKey, message) {
 const args = process.argv.slice(2);
 
 if (args.length !== 2) {
-  console.log(`Enter arguments [routingKey, message]`);
+  console.log(`Enter arguments [routingKey, messageToPublish]`);
   process.exit(1);
 }
 console.log(args);
-const [routingKey, message] = args;
-publishToTopic(routingKey, message);
+const [routingKey, messageToPublish] = args;
+publishToTopic(routingKey, messageToPublish);
