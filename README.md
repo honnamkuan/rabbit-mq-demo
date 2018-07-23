@@ -3,12 +3,12 @@
 ## Prerequisites
 - RabbitMQ server on localhost
 - Latest Node.js LTS version
-- npm or yarn installed globally
+- Global installation of yarn
 
 ## Installation
   1. Clone git repo
-  1. Open terminal at project folder
-  1. npm install
+  2. Open terminal at project folder
+  3. Execute `yarn install`
 
 ## Running the demo
 ### Queue Demo
